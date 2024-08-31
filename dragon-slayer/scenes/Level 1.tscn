@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://bmk4rtjhadu28"]
+[gd_scene load_steps=15 format=3 uid="uid://bmk4rtjhadu28"]
 
 [ext_resource type="PackedScene" uid="uid://bfugsg76hegra" path="res://scenes/player.tscn" id="1_gtnrp"]
+[ext_resource type="Script" path="res://scenes/game_manager.gd" id="1_x6h6k"]
 [ext_resource type="Texture2D" uid="uid://cb3w3se0r2ib3" path="res://assets/sprites/world_tileset.png" id="2_bnrux"]
 [ext_resource type="PackedScene" uid="uid://demtg8x5ox7n7" path="res://scenes/platform.tscn" id="3_3fbr3"]
 [ext_resource type="PackedScene" uid="uid://blmgpeyybeuw8" path="res://scenes/coin.tscn" id="4_ue6d5"]
@@ -185,7 +186,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(352, -35)]
+"values": [Vector2(338, -34)]
 }
 
 [sub_resource type="Animation" id="Animation_0g2wj"]
@@ -205,13 +206,43 @@ tracks/0/keys = {
 "values": [Vector2(352, -35), Vector2(423, -35)]
 }
 
+[sub_resource type="Animation" id="Animation_xf0pe"]
+resource_name = "move_platform"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(338, -34), Vector2(403, -34)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yotqf"]
 _data = {
 "RESET": SubResource("Animation_81q8l"),
-"move": SubResource("Animation_0g2wj")
+"move": SubResource("Animation_0g2wj"),
+"move_platform": SubResource("Animation_xf0pe")
 }
 
 [node name="Level 1" type="Node2D"]
+
+[node name="GameManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_x6h6k")
+
+[node name="ScoreLabel" type="Label" parent="GameManager"]
+unique_name_in_owner = true
+offset_left = -20.0
+offset_top = -92.0
+offset_right = 74.0
+offset_bottom = -43.0
+horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="Player" parent="." instance=ExtResource("1_gtnrp")]
 position = Vector2(19, -4)
@@ -244,12 +275,15 @@ position = Vector2(280, -46)
 [node name="Platforms" type="Node" parent="."]
 
 [node name="Platform" parent="Platforms" instance=ExtResource("3_3fbr3")]
-position = Vector2(352, -35)
+position = Vector2(338, -34)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Platforms/Platform"]
 libraries = {
 "": SubResource("AnimationLibrary_yotqf")
 }
+autoplay = "move_platform"
 
 [node name="Slime" parent="." instance=ExtResource("6_mcfot")]
 position = Vector2(138, -52)
+
+[node name="Node" type="Node" parent="."]
